@@ -9,9 +9,9 @@
 <body>
     <div class="main">
         <div class="container-sm m-10">
-            <h1 class="m-4">📜 당일생산 계산기</h1>
+            <h1 class="m-4">📜 BAKE 당일생산 계산기</h1>
             <h3 class="m-3">✔ 전일 잔량</h3>
-            <form class="m-3">
+            <form class="bake-form m-3">
                 <div class="m-3">
                     <label class="form-label">치즈</label>
                     <input type="number" class="form-control" id="cheese-yesterday" placeholder="전일 잔량을 입력하세요." >
@@ -26,7 +26,7 @@
                 </div>
             </form>
             <h3 class="m-3">✔ 입고</h3>
-            <form class="m-3">
+            <form class="bake-form m-3">
                 <div class="m-3">
                     <label class="form-label">치즈</label>
                     <input type="number" class="form-control" id="cheese-receiving-box" placeholder="박스 개수를 입력하세요.">
@@ -41,7 +41,7 @@
                 </div>
             </form>
             <h3 class="m-3">✔ 남은 재고</h3>
-            <form class="m-3">
+            <form class="bake-form m-3">
                 <div class="m-3">
                     <label class="form-label">치즈</label>
                     <input type="number" class="form-control" id="cheese-left-box" placeholder="박스 개수를 입력하세요.">
@@ -61,7 +61,7 @@
                     <input type="number" class="form-control" id="season2-left-piece" placeholder="낱개 개수를 입력하세요.">
                 </div>
                 <button type="button" class="btn btn-primary m-3" id="calculate-btn" >계산하기</button>
-                <button type="button" class="btn btn-secondary m-3" id="reset-btn" >초기화</button>
+                <button type="reset" class="btn btn-secondary m-3" id="reset-btn" >초기화</button>
             </form>
 
             <div class="m-3">
@@ -107,6 +107,11 @@
             crossorigin="anonymous"></script>
 
     <script>
+        document.getElementById("reset-btn").addEventListener("click", function(event) {
+            event.preventDefault();
+            document.querySelectorAll(".bake-form").forEach(form => form.reset());
+            document.querySelectorAll("input").forEach(input => input.setAttribute("value", ""));
+        }, false);
 
         document.getElementById("calculate-btn").addEventListener("click", function(event) {
             event.preventDefault();
