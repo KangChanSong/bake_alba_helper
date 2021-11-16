@@ -68,25 +68,25 @@
                 <div class="card border-primary mb-3" style="width: 18rem;">
                     <div class="card-header">입고</div>
                     <div class="card-body text-primary" id="receiving-result">
-                        <p class="card-text">치즈 : <span id="cheese-receiving-result"></span></p>
-                        <p class="card-text">시즌1 : <span id="season1-receiving-result"></span></p>
-                        <p class="card-text">시즌2: <span id="season2-receiving-result"></span></p>
+                        <p class="card-text">치즈 : <input type="text" class="cheese" disabled/></p>
+                        <p class="card-text">시즌1 : <input type="text" class="season1" disabled/></p>
+                        <p class="card-text">시즌2 : <input type="text" class="season2" disabled/></p>
                     </div>
                 </div>
                 <div class="card border-secondary mb-3" style="width: 18rem;">
                     <div class="card-header">당일생산</div>
-                    <div class="card-body text-primary">
-                        <p class="card-text">치즈 : <span id="cheese-today-sell"></span></p>
-                        <p class="card-text">시즌1 : <span id="season1-today-sell"></span></p>
-                        <p class="card-text">시즌2 : <span id="season2-today-sell"></span></p>
+                    <div class="card-body text-primary" id="today-sell">
+                        <p class="card-text">치즈 : <input type="text" class="cheese" disabled/></p>
+                        <p class="card-text">시즌1 : <input type="text" class="season1" disabled/></p>
+                        <p class="card-text">시즌2 : <input type="text" class="season2" disabled/></p>
                     </div>
                 </div>
                 <div class="card border-success mb-3" style="width: 18rem;">
                     <div class="card-header">남은재고</div>
-                    <div class="card-body text-primary">
-                        <p class="card-text">치즈 : <span id="cheese-left-result"></span></p>
-                        <p class="card-text">시즌1 : <span id="season1-left-result"></span></p>
-                        <p class="card-text">시즌2 : <span id="season2-left-result"></span></p>
+                    <div class="card-body text-primary" id="left-result">
+                        <p class="card-text">치즈 : <input type="text" class="cheese" disabled/></p>
+                        <p class="card-text">시즌1 : <input type="text" class="season1" disabled/></p>
+                        <p class="card-text">시즌2 : <input type="text" class="season2" disabled/></p>
                     </div>
                 </div>
             </div>
@@ -118,9 +118,17 @@
             let season1 = calculate(true, 1);
             let season2 = calculate(true,2);
 
-            console.log(cheese);
-            console.log(season1);
-            console.log(season2);
+            document.querySelector("#receiving-result .cheese").setAttribute("value", cheese.receiving);
+            document.querySelector("#today-sell .cheese").setAttribute("value", cheese.todaySell);
+            document.querySelector("#left-result .cheese").setAttribute("value", cheese.left);
+
+            document.querySelector("#receiving-result .season1").setAttribute("value", season1.receiving);
+            document.querySelector("#today-sell .season1").setAttribute("value", season1.todaySell);
+            document.querySelector("#left-result .season1").setAttribute("value", season1.left);
+
+            document.querySelector("#receiving-result .season2").setAttribute("value", season2.receiving);
+            document.querySelector("#today-sell .season2").setAttribute("value", season2.todaySell);
+            document.querySelector("#left-result .season2").setAttribute("value", season2.left);
 
         }
 
@@ -131,17 +139,24 @@
             } else {
                 menu = "cheese"
             }
-            let yesterday = parseInt(document.getElementById(menu + "-yesterday").value);
-            let receiving = parseInt(document.getElementById(menu + "-receiving-box").value);
-            let leftBox = parseInt(document.getElementById(menu + "-left-box").value);
-            let leftPan = parseInt(document.getElementById(menu + "-left-pan").value);
-            let leftPiece = parseInt(document.getElementById(menu + "-left-piece").value);
+            let yesterday = sanitize(document.getElementById(menu + "-yesterday").value);
+            let receiving = sanitize(document.getElementById(menu + "-receiving-box").value);
+            let leftBox = sanitize(document.getElementById(menu + "-left-box").value);
+            let leftPan = sanitize(document.getElementById(menu + "-left-pan").value);
+            let leftPiece = sanitize(document.getElementById(menu + "-left-piece").value);
+
 
             if(season){
                 return calculateSeason(yesterday, receiving, leftBox, leftPan, leftPiece);
             } else {
                 return calculateCheese(yesterday, receiving, leftBox, leftPan, leftPiece);
             }
+        }
+
+        let sanitize = input => {
+            let value = parseInt(input);
+            console.log("value = "  + value);
+            return isNaN(value) ? 0 : value;
         }
 
         let calculateCheese = (yesterday, receiving, leftBox, leftPan, leftPiece) => {
@@ -151,8 +166,8 @@
             let r3 = (leftBox * 4) + leftPan + (leftPiece > 0 ? 0.5 : 0);
             // 당일생산
             let r2 = (yesterday + r1) - r3;
-            console.log(r2);
-            console.log(r3);
+
+
             return {
                 receiving : r1,
                 todaySell : r2,
